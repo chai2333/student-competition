@@ -1,35 +1,63 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import React from "react";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import DashboardLayout from "./layouts/DashboardLayout";
+import LoginPage from "./pages/LoginPage";
+import AwardList from "./pages/AwardList";
+import AddAward from "./pages/AddAward";
+import Profile from "./pages/Profile";
+import AwardRecordAdmin from "./pages/AwardRecordAdmin";
+import AwardReviewAdmin from "./pages/AwardReviewAdmin";
 
-function App() {
-  const [count, setCount] = useState(0)
-
+const App = () => {
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
-}
+    <Router>
+      <Routes>
+        {/* 登录页面 */}
+        <Route path="/" element={<LoginPage />} />
 
-export default App
+        {/* 学生界面 */}
+        <Route
+          path="/student/*"
+          element={
+            <DashboardLayout
+              routes={[
+                { path: "/student/awards", name: "我的获奖记录" },
+                { path: "/student/add-award", name: "添加获奖记录" },
+                { path: "/student/profile", name: "个人信息" },
+              ]}
+            >
+              <Routes>
+                <Route path="awards" element={<AwardList />} />
+                <Route path="add-award" element={<AddAward />} />
+                <Route path="profile" element={<Profile />} />
+              </Routes>
+            </DashboardLayout>
+          }
+        />
+
+        {/* 管理员界面 */}
+        <Route
+          path="/admin/*"
+          element={
+            <DashboardLayout
+              routes={[
+                { path: "/admin/records", name: "获奖记录管理" },
+                { path: "/admin/reviews", name: "获奖审核管理" },
+              ]}
+            >
+              <Routes>
+                <Route path="records" element={<AwardRecordAdmin />} />
+                <Route path="reviews" element={<AwardReviewAdmin />} />
+              </Routes>
+            </DashboardLayout>
+          }
+        />
+
+        {/* 默认重定向 */}
+        <Route path="*" element={<Navigate to="/" />} />
+      </Routes>
+    </Router>
+  );
+};
+
+export default App;
