@@ -16,10 +16,10 @@ const LoginPage = () => {
         if (response.status === 200) {
           localStorage.setItem("userid", response.data.id);
           if (response.data.id < 50) {
-            alert("登录成功！管理员", response.data.username);
+            alert("登录成功！管理员" + response.data.username);
             navigate("/admin");
           } else {
-            alert("登录成功！学生", response.data.username);
+            alert("登录成功！学生" + response.data.username);
             navigate("/student");
           }
         } else {
