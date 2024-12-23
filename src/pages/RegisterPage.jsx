@@ -2,43 +2,50 @@ import {useState} from "react";
 import {useNavigate} from "react-router-dom";
 import axios from "axios";
 
-const LoginPage = () => {
+const RegisterPage = () => {
   const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const navigate = useNavigate();
 
-  const handleLogin = () => {
-    axios.post("http://localhost:5069/api/auth/login", {
+  const handleRegister = () => {
+    if (password !== confirmPassword) {
+      alert("密码和确认密码不匹配！");
+      return;
+    }
+
+    axios.post("http://localhost:5069/api/Auth/register", {
       username: username,
       password: password,
-    })
-      .then((response) => {
-        if (response.status === 200) {
-          localStorage.setItem("userid", response.data.id);
-          if (response.data.id < 50) {
-            alert("登录成功！管理员", response.data.username);
-            navigate("/admin");
-          } else {
-            alert("登录成功！学生", response.data.username);
-            navigate("/student");
-          }
-        } else {
-          alert("登录失败！");
-        }
-      })
-      .catch(() => {
-        alert("服务器错误");
-      });
+      email: email,
+    }).then((response) => {
+      if (response.status === 200) {
+        alert("注册成功！");
+        navigate("/login"); // 跳转到登录界面
+      } else {
+        alert("注册失败！");
+      }
+    }).catch(() => {
+      alert("服务器错误");
+    });
   };
 
   return (
     <div style={styles.container}>
-      <h1>登录</h1>
+      <h1>注册</h1>
       <input
         type="text"
         placeholder="用户名"
         value={username}
         onChange={(e) => setUsername(e.target.value)}
+        style={styles.input}
+      />
+      <input
+        type="email"
+        placeholder="邮箱"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
         style={styles.input}
       />
       <input
@@ -48,12 +55,17 @@ const LoginPage = () => {
         onChange={(e) => setPassword(e.target.value)}
         style={styles.input}
       />
-      <button onClick={handleLogin} style={styles.button}>
-        登录
-      </button>
-      <a onClick={() => navigate("/register")} style={styles.linkButton}>
+      <input
+        type="password"
+        placeholder="确认密码"
+        value={confirmPassword}
+        onChange={(e) => setConfirmPassword(e.target.value)}
+        style={styles.input}
+      />
+      <button onClick={handleRegister} style={styles.button}>
         注册
-      </a>
+      </button>
+      <a onClick={() => navigate("/login")} style={styles.linkButton}>已有账号，登录</a>
     </div>
   );
 };
@@ -87,9 +99,9 @@ const styles = {
   linkButton: {
     color: "#4CAF50",
     textDecoration: "none",
-    marginTop: "10px",
+    marginTop: "20px",
     cursor: "pointer",
   },
 };
 
-export default LoginPage;
+export default RegisterPage;
