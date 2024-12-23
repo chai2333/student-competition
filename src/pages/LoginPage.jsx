@@ -1,5 +1,5 @@
-import {useState} from "react";
-import {useNavigate} from "react-router-dom";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 const LoginPage = () => {
@@ -15,6 +15,8 @@ const LoginPage = () => {
       .then((response) => {
         if (response.status === 200) {
           localStorage.setItem("userid", response.data.id);
+          localStorage.setItem("username", response.data.username);
+          localStorage.setItem("email", response.data.email);
           if (response.data.id < 50) {
             alert("登录成功！管理员" + response.data.username);
             navigate("/admin");
