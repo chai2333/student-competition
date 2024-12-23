@@ -4,7 +4,7 @@ import { NavLink } from "react-router-dom";
 const Navigation = ({ routes }) => {
   return (
     <div style={styles.sidebar}>
-      <div style={styles.logo}>LOGO</div>
+      <div style={styles.logo}>竞赛成果管理系统</div>
       <ul style={styles.navList}>
         {routes.map((route) => (
           <li key={route.path} style={styles.navItem}>
