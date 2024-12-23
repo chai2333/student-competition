@@ -3,13 +3,24 @@ import React, { useState, useEffect } from "react";
 const Profile = () => {
   const [user, setUser] = useState({
     name: "username",
-    id: "1",
-    email: "3498572893547982",
+    id: "unknown",
+    email: "unknown",
   });
 
   const [isEditing, setIsEditing] = useState(false);
   const [editedUser, setEditedUser] = useState(user);
   const [password, setPassword] = useState("");
+
+  useEffect(() => {
+    const userId = localStorage.getItem("userid");
+    const username = localStorage.getItem("username");
+    const email = localStorage.getItem("email");
+
+    if (userId && username && email) {
+      setUser({ id: userId, name: username, email: email });
+      setEditedUser({ id: userId, name: username, email: email });
+    }
+  }, []);
 
   const handleEditClick = () => {
     setIsEditing(true);
@@ -36,6 +47,8 @@ const Profile = () => {
 
         if (data === "用户信息更新成功") {
           alert("用户信息更新成功");
+          localStorage.setItem("username", editedUser.name);
+          localStorage.setItem("email", editedUser.email);
         } else {
           alert("更新失败");
         }
